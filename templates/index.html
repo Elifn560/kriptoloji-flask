@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>İstemci-Sunucu Şifreleme</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <h1>İstemci - Sunucu Şifreleme Uygulama Ödevi</h1>
+    <p></p>
+  </header>
+
+  <main>
+    <section class="grid">
+   
+      <div class="card" data-method="caesar">
+        <h3>Caesar (Sezar)</h3>
+        <p>Kaydırma anahtarı ile</p>
+        <button class="open">Seç</button>
+      </div>
+
+      <div class="card" data-method="vigenere">
+        <h3>Vigenère</h3>
+        <p>Kelime anahtarı ile</p>
+        <button class="open">Seç</button>
+      </div>
+
+      <div class="card" data-method="substitution">
+        <h3>Substitution</h3>
+        <p>26 harflik anahtar</p>
+        <button class="open">Seç</button>
+      </div>
+
+      <div class="card" data-method="affine">
+        <h3>Affine</h3>
+        <p>E(x) = (a*x + b) mod 26</p>
+        <button class="open">Seç</button>
+      </div>
+
+      <div class="card" data-method="playfair">
+        <h3>Playfair</h3>
+        <p>5x5 tablo tabanlı</p>
+        <button class="open">Seç</button>
+      </div>
+
+      <div class="card" data-method="route">
+        <h3>Route</h3>
+        <p>Geometrik/kolon tabanlı</p>
+        <button class="open">Seç</button>
+      </div>
+
+      <div class="card" data-method="railfence">
+        <h3>Railfence</h3>
+        <p>Zigzag ray şifreleme</p>
+        <button class="open">Seç</button>
+      </div>
+    </section>
+
+    <section class="result">
+      <h2>Sonuç</h2>
+      <textarea id="resultArea" readonly placeholder="Şifre/Çözüm sonucu burada gösterilecek..."></textarea>
+    </section>
+
+    <!-- Modal / Form -->
+    <div id="modal" class="modal hidden">
+      <div class="modal-content">
+        <h3 id="modalTitle">Şifreleme</h3>
+        <form id="cipherForm">
+          <div id="dynamicFields"></div>
+
+          <label>Metin</label>
+          <textarea id="text" name="text" placeholder="Metni buraya yazın..." required></textarea>
+
+          <div class="actions">
+            <button type="button" id="encryptBtn">Şifrele</button>
+            <button type="button" id="decryptBtn">Çöz</button>
+            <button type="button" id="closeBtn">Kapat</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
