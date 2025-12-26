@@ -1,88 +1,63 @@
-<!doctype html>
-<html lang="tr">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>İstemci-Sunucu Şifreleme</title>
-  <link rel="stylesheet" href="/static/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crypto Web Client</title>
+<link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-  <header>
-    <h1>İstemci - Sunucu Şifreleme Uygulama Ödevi</h1>
-    <p></p>
-  </header>
+<div class="container">
+    <h1>Crypto Web Client 🔐</h1>
 
-  <main>
-    <section class="grid">
-   
-      <div class="card" data-method="caesar">
-        <h3>Caesar (Sezar)</h3>
-        <p>Kaydırma anahtarı ile</p>
-        <button class="open">Seç</button>
-      </div>
+    <form id="cryptoForm">
+        <div class="form-group">
+            <label for="message">Message:</label>
+            <input type="text" id="message" placeholder="Enter your message" required>
+        </div>
 
-      <div class="card" data-method="vigenere">
-        <h3>Vigenère</h3>
-        <p>Kelime anahtarı ile</p>
-        <button class="open">Seç</button>
-      </div>
+        <div class="form-group">
+            <label for="algorithm">Algorithm:</label>
+            <select id="algorithm">
+                <option value="caesar">Caesar</option>
+                <option value="vigenere">Vigenere</option>
+                <option value="affine">Affine</option>
+                <option value="railfence">RailFence</option>
+                <option value="playfair">Playfair</option>
+                <option value="hill">Hill</option>
+                <option value="polybius">Polybius</option>
+                <option value="rot">Rot</option>
+                <option value="substitution">Substitution</option>
+                <option value="pigpen">Pigpen</option>
+                <option value="aes">AES</option>
+                <option value="des">DES</option>
+                <option value="rsa">RSA</option>
+            </select>
+        </div>
 
-      <div class="card" data-method="substitution">
-        <h3>Substitution</h3>
-        <p>26 harflik anahtar</p>
-        <button class="open">Seç</button>
-      </div>
+        <div class="form-group">
+            <label for="mode">Mode:</label>
+            <select id="mode">
+                <option value="library">Library</option>
+                <option value="manual">Manual</option>
+            </select>
+        </div>
 
-      <div class="card" data-method="affine">
-        <h3>Affine</h3>
-        <p>E(x) = (a*x + b) mod 26</p>
-        <button class="open">Seç</button>
-      </div>
+        <div class="form-group">
+            <label for="operation">Operation:</label>
+            <select id="operation">
+                <option value="encrypt">Encrypt</option>
+                <option value="decrypt">Decrypt</option>
+            </select>
+        </div>
 
-      <div class="card" data-method="playfair">
-        <h3>Playfair</h3>
-        <p>5x5 tablo tabanlı</p>
-        <button class="open">Seç</button>
-      </div>
+        <button type="submit" class="btn">Send</button>
+    </form>
 
-      <div class="card" data-method="route">
-        <h3>Route</h3>
-        <p>Geometrik/kolon tabanlı</p>
-        <button class="open">Seç</button>
-      </div>
+    <h2>Server Response:</h2>
+    <pre id="response"></pre>
+</div>
 
-      <div class="card" data-method="railfence">
-        <h3>Railfence</h3>
-        <p>Zigzag ray şifreleme</p>
-        <button class="open">Seç</button>
-      </div>
-    </section>
-
-    <section class="result">
-      <h2>Sonuç</h2>
-      <textarea id="resultArea" readonly placeholder="Şifre/Çözüm sonucu burada gösterilecek..."></textarea>
-    </section>
-
-    <!-- Modal / Form -->
-    <div id="modal" class="modal hidden">
-      <div class="modal-content">
-        <h3 id="modalTitle">Şifreleme</h3>
-        <form id="cipherForm">
-          <div id="dynamicFields"></div>
-
-          <label>Metin</label>
-          <textarea id="text" name="text" placeholder="Metni buraya yazın..." required></textarea>
-
-          <div class="actions">
-            <button type="button" id="encryptBtn">Şifrele</button>
-            <button type="button" id="decryptBtn">Çöz</button>
-            <button type="button" id="closeBtn">Kapat</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </main>
-
-  <script src="/static/app.js"></script>
+<script src="/static/script.js"></script>
 </body>
 </html>
