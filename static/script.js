@@ -5,17 +5,27 @@ const keyGroup = document.getElementById("keyGroup");
 function updateUI() {
     const alg = algorithmSelect.value;
 
-    if (["aes", "des", "rsa"].includes(alg)) {
-        modeGroup.style.display = "block";
-        keyGroup.style.display = "block";
-    } else {
-        modeGroup.style.display = "none";
+    // RSA key istemez
+    if (alg === "rsa") {
         keyGroup.style.display = "none";
+        modeGroup.style.display = "none";
+        return;
     }
+
+    // AES / DES → key + mode
+    if (["aes", "des"].includes(alg)) {
+        keyGroup.style.display = "block";
+        modeGroup.style.display = "block";
+        return;
+    }
+
+    // 🔥 MANUEL ALGORİTMALAR → SADECE KEY
+    keyGroup.style.display = "block";
+    modeGroup.style.display = "none";
 }
 
 algorithmSelect.addEventListener("change", updateUI);
-updateUI(); // sayfa açılınca
+updateUI();
 
 document.getElementById("cryptoForm").addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -23,9 +33,8 @@ document.getElementById("cryptoForm").addEventListener("submit", async (e) => {
     const payload = {
         message: document.getElementById("message").value,
         algorithm: algorithmSelect.value,
-        mode: document.getElementById("mode").value,
         operation: document.getElementById("operation").value,
-        key: document.getElementById("key").value
+        key: document.getElementById("key").value || null
     };
 
     const res = await fetch("/send", {
