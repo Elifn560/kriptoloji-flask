@@ -3,7 +3,7 @@ class PlayfairCipher:
         self.key = key
     
     def encrypt(self, text):
-        return text  # Placeholder
+        return text  
     
     def decrypt(self, text):
         return text

@@ -1,50 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Crypto Web Client</title>
-<link rel="stylesheet" href="/static/style.css">
+    <meta charset="UTF-8">
+    <title>Crypto Web Client</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+
 <div class="container">
-    <h1>Crypto Web Client 🔐</h1>
+    <h1>🔐 Crypto Web Client</h1>
+    <p class="subtitle">Classical & Modern Encryption Algorithms</p>
 
     <form id="cryptoForm">
+
         <div class="form-group">
-            <label for="message">Message:</label>
-            <input type="text" id="message" placeholder="Enter your message" required>
+            <label for="message">Message</label>
+            <input type="text" id="message" placeholder="Enter message" required>
         </div>
 
         <div class="form-group">
-            <label for="algorithm">Algorithm:</label>
+            <label for="algorithm">Algorithm</label>
             <select id="algorithm">
-                <option value="caesar">Caesar</option>
-                <option value="vigenere">Vigenere</option>
-                <option value="affine">Affine</option>
-                <option value="railfence">RailFence</option>
-                <option value="playfair">Playfair</option>
-                <option value="hill">Hill</option>
-                <option value="polybius">Polybius</option>
-                <option value="rot">Rot</option>
-                <option value="substitution">Substitution</option>
-                <option value="pigpen">Pigpen</option>
-                <option value="aes">AES</option>
-                <option value="des">DES</option>
-                <option value="rsa">RSA</option>
+                <optgroup label="Classical Ciphers">
+                    <option value="caesar">Caesar</option>
+                    <option value="vigenere">Vigenere</option>
+                    <option value="affine">Affine</option>
+                    <option value="railfence">RailFence</option>
+                    <option value="playfair">Playfair</option>
+                    <option value="hill">Hill</option>
+                    <option value="polybius">Polybius</option>
+                    <option value="rot">Rot</option>
+                    <option value="substitution">Substitution</option>
+                    <option value="pigpen">Pigpen</option>
+                </optgroup>
+                <optgroup label="Modern Ciphers">
+                    <option value="aes">AES</option>
+                    <option value="des">DES</option>
+                    <option value="rsa">RSA</option>
+                </optgroup>
             </select>
         </div>
 
-        <div class="form-group">
-            <label for="mode">Mode:</label>
+        <div class="form-group" id="modeGroup">
+            <label for="mode">Implementation Mode</label>
             <select id="mode">
                 <option value="library">Library</option>
                 <option value="manual">Manual</option>
             </select>
         </div>
 
+        <div class="form-group" id="keyGroup">
+            <label for="key">Key</label>
+            <input type="text" id="key" placeholder="AES: 16 bytes | DES: 8 bytes">
+        </div>
+
         <div class="form-group">
-            <label for="operation">Operation:</label>
+            <label for="operation">Operation</label>
             <select id="operation">
                 <option value="encrypt">Encrypt</option>
                 <option value="decrypt">Decrypt</option>
@@ -54,10 +66,12 @@
         <button type="submit" class="btn">Send</button>
     </form>
 
-    <h2>Server Response:</h2>
-    <pre id="response"></pre>
+    <div class="response-box">
+        <h3>Server Response</h3>
+        <pre id="response">Waiting for request...</pre>
+    </div>
 </div>
 
-<script src="/static/script.js"></script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

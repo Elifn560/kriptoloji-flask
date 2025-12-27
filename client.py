@@ -4,7 +4,7 @@ from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_OAEP
 import base64
 from manual_crypto import manual_aes_encrypt, manual_des_encrypt
-from server import public_key  # Sunucunun public key'i
+from server import public_key  # Sunucu
 
 AES_KEY = b'16byteslongkey!!'
 DES_KEY = b'8bytesk'
@@ -14,7 +14,7 @@ def pad_bytes(data, block_size):
         data += b' '
     return data
 
-# --- Library Encrypt ---
+#kütüphane tabanı
 def encrypt_aes(msg):
     from Crypto.Cipher import AES
     cipher = AES.new(AES_KEY, AES.MODE_ECB)
@@ -29,7 +29,7 @@ def encrypt_rsa(msg):
     cipher = PKCS1_OAEP.new(public_key)
     return base64.b64encode(cipher.encrypt(msg.encode())).decode()
 
-# --- Kullanıcı Girişi ---
+#kullanıcı girişi
 msg = input("Enter message: ")
 alg = input("Choose algorithm (AES/DES/RSA): ")
 mode = input("Choose mode (library/manual): ")
@@ -56,11 +56,15 @@ else:
     print("Invalid mode")
     exit()
 
-# --- Sunucuya Gönder ---
+
+key = input("Enter key: ")
 response = requests.post('http://127.0.0.1:5000/send', json={
-    "algorithm": alg,
+    "algorithm": alg.lower(),
     "mode": mode,
-    "message": encrypted_msg
+    "operation": "encrypt",
+    "message": encrypted_msg,
+    "key": key
 })
+
 
 print(response.json())

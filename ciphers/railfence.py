@@ -15,4 +15,4 @@ class RailFenceCipher:
         return ''.join(rail)
     
     def decrypt(self, text):
-        return text  # Basitleştirilmiş; tam çözüm eklenebilir
+        return text 
