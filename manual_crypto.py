@@ -1,29 +1,74 @@
-from Crypto.Cipher import AES, DES
+# manual_crypto.py
+# KÜTÜPHANE KULLANMADAN (EĞİTİM AMAÇLI)
+
 import base64
 
-AES_KEY = b'16byteslongkey!!'
-DES_KEY = b'8bytesk'
+# =========================
+# MANUAL AES (Toy Version)
+# =========================
 
-def manual_aes_encrypt(msg,key):
-    cipher = AES.new(AES_KEY, AES.MODE_ECB)
-    padded = text.encode()
-    while len(padded) % 16 != 0:
-        padded += b' '
-    return base64.b64encode(cipher.encrypt(padded)).decode()
+BLOCK_SIZE_AES = 16
 
-def manual_aes_decrypt(msg,key):
-    cipher = AES.new(AES_KEY, AES.MODE_ECB)
-    decrypted = cipher.decrypt(base64.b64decode(cipher_text))
+def _pad(data, size):
+    while len(data) % size != 0:
+        data += b" "
+    return data
+
+def manual_aes_encrypt(text, key):
+    """
+    Basitleştirilmiş AES mantığı:
+    XOR + blok mantığı (educational)
+    """
+    data = _pad(text.encode(), BLOCK_SIZE_AES)
+    key = key.encode()
+
+    encrypted = bytearray()
+
+    for i in range(len(data)):
+        encrypted.append(data[i] ^ key[i % len(key)])
+
+    return base64.b64encode(encrypted).decode()
+
+def manual_aes_decrypt(cipher_text, key):
+    data = base64.b64decode(cipher_text)
+    key = key.encode()
+
+    decrypted = bytearray()
+
+    for i in range(len(data)):
+        decrypted.append(data[i] ^ key[i % len(key)])
+
     return decrypted.decode().strip()
 
-def manual_des_encrypt(msg,key):
-    cipher = DES.new(DES_KEY, DES.MODE_ECB)
-    padded = text.encode()
-    while len(padded) % 8 != 0:
-        padded += b' '
-    return base64.b64encode(cipher.encrypt(padded)).decode()
 
-def manual_des_decrypt(msg,key):
-    cipher = DES.new(DES_KEY, DES.MODE_ECB)
-    decrypted = cipher.decrypt(base64.b64decode(cipher_text))
+# =========================
+# MANUAL DES (Toy Version)
+# =========================
+
+BLOCK_SIZE_DES = 8
+
+def manual_des_encrypt(text, key):
+    """
+    Basitleştirilmiş DES mantığı:
+    XOR + 8 byte blok
+    """
+    data = _pad(text.encode(), BLOCK_SIZE_DES)
+    key = key.encode()
+
+    encrypted = bytearray()
+
+    for i in range(len(data)):
+        encrypted.append(data[i] ^ key[i % len(key)])
+
+    return base64.b64encode(encrypted).decode()
+
+def manual_des_decrypt(cipher_text, key):
+    data = base64.b64decode(cipher_text)
+    key = key.encode()
+
+    decrypted = bytearray()
+
+    for i in range(len(data)):
+        decrypted.append(data[i] ^ key[i % len(key)])
+
     return decrypted.decode().strip()

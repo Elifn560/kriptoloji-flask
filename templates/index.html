@@ -22,7 +22,8 @@
         <div class="form-group">
             <label for="algorithm">Algorithm</label>
             <select id="algorithm">
-                <optgroup label="Classical Ciphers">
+
+                <optgroup label="Classical Ciphers (Manual)">
                     <option value="caesar">Caesar</option>
                     <option value="vigenere">Vigenere</option>
                     <option value="affine">Affine</option>
@@ -34,11 +35,18 @@
                     <option value="substitution">Substitution</option>
                     <option value="pigpen">Pigpen</option>
                 </optgroup>
-                <optgroup label="Modern Ciphers">
-                    <option value="aes">AES</option>
-                    <option value="des">DES</option>
+
+                <optgroup label="Modern Ciphers (Library)">
+                    <option value="aes">AES (Library)</option>
+                    <option value="des">DES (Library)</option>
                     <option value="rsa">RSA</option>
                 </optgroup>
+
+                <optgroup label="Modern Ciphers (Manual)">
+                    <option value="aes">AES (Manual)</option>
+                    <option value="des">DES (Manual)</option>
+                </optgroup>
+
             </select>
         </div>
 

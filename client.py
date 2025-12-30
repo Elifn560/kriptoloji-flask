@@ -1,70 +1,50 @@
 import requests
-from Crypto.Cipher import AES, DES
-from Crypto.PublicKey import RSA
-from Crypto.Cipher import PKCS1_OAEP
-import base64
-from manual_crypto import manual_aes_encrypt, manual_des_encrypt
-from server import public_key  # Sunucu
 
-AES_KEY = b'16byteslongkey!!'
-DES_KEY = b'8bytesk'
+# ==========================
+# KULLANICI GİRİŞİ
+# ==========================
 
-def pad_bytes(data, block_size):
-    while len(data) % block_size != 0:
-        data += b' '
-    return data
-
-#kütüphane tabanı
-def encrypt_aes(msg):
-    from Crypto.Cipher import AES
-    cipher = AES.new(AES_KEY, AES.MODE_ECB)
-    return base64.b64encode(cipher.encrypt(pad_bytes(msg.encode(), 16))).decode()
-
-def encrypt_des(msg):
-    from Crypto.Cipher import DES
-    cipher = DES.new(DES_KEY, DES.MODE_ECB)
-    return base64.b64encode(cipher.encrypt(pad_bytes(msg.encode(), 8))).decode()
-
-def encrypt_rsa(msg):
-    cipher = PKCS1_OAEP.new(public_key)
-    return base64.b64encode(cipher.encrypt(msg.encode())).decode()
-
-#kullanıcı girişi
 msg = input("Enter message: ")
-alg = input("Choose algorithm (AES/DES/RSA): ")
-mode = input("Choose mode (library/manual): ")
+alg = input("Choose algorithm (caesar/vigenere/aes/des/rsa): ").lower()
+op  = input("Choose operation (encrypt/decrypt): ").lower()
 
-if mode == 'library':
-    if alg == 'AES':
-        encrypted_msg = encrypt_aes(msg)
-    elif alg == 'DES':
-        encrypted_msg = encrypt_des(msg)
-    elif alg == 'RSA':
-        encrypted_msg = encrypt_rsa(msg)
-    else:
-        print("Unsupported algorithm")
-        exit()
-elif mode == 'manual':
-    if alg == 'AES':
-        encrypted_msg = manual_aes_encrypt(msg)
-    elif alg == 'DES':
-        encrypted_msg = manual_des_encrypt(msg)
-    else:
-        print("Manual mode supports only AES/DES")
-        exit()
+key = ""
+mode = "library"
+
+# AES / DES için ek seçimler
+if alg in ["aes", "des"]:
+    mode = input("Choose mode (library/manual): ").lower()
+    key = input("Enter key: ")
+
+# Manuel klasik algoritmalar
+elif alg in ["caesar", "vigenere", "affine", "rot", "substitution"]:
+    key = input("Enter key: ")
+
+# RSA için key yok
+elif alg == "rsa":
+    pass
+
 else:
-    print("Invalid mode")
+    print("Unsupported algorithm")
     exit()
 
 
-key = input("Enter key: ")
-response = requests.post('http://127.0.0.1:5000/send', json={
-    "algorithm": alg.lower(),
+# ==========================
+# SUNUCUYA GÖNDER
+# ==========================
+
+payload = {
+    "message": msg,
+    "algorithm": alg,
+    "operation": op,
     "mode": mode,
-    "operation": "encrypt",
-    "message": encrypted_msg,
     "key": key
-})
+}
 
+response = requests.post(
+    "http://127.0.0.1:5000/send",
+    json=payload
+)
 
+print("\n--- SERVER RESPONSE ---")
 print(response.json())

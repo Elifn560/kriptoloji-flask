@@ -1,8 +1,9 @@
-
-
 import string
 
 
+# =========================
+# CAESAR
+# =========================
 def caesar_encrypt(text, key):
     key = int(key)
     result = ""
@@ -18,7 +19,9 @@ def caesar_decrypt(text, key):
     return caesar_encrypt(text, -int(key))
 
 
-
+# =========================
+# VIGENERE
+# =========================
 def vigenere_encrypt(text, key):
     key = key.lower()
     res = ""
@@ -48,7 +51,9 @@ def vigenere_decrypt(text, key):
     return res
 
 
-
+# =========================
+# ROT
+# =========================
 def rot_encrypt(text, key):
     return caesar_encrypt(text, int(key))
 
@@ -56,7 +61,9 @@ def rot_decrypt(text, key):
     return caesar_decrypt(text, int(key))
 
 
-
+# =========================
+# AFFINE
+# =========================
 def affine_encrypt(text, key):
     a, b = map(int, key.split(","))
     res = ""
@@ -81,6 +88,9 @@ def affine_decrypt(text, key):
     return res
 
 
+# =========================
+# SUBSTITUTION
+# =========================
 def substitution_encrypt(text, key):
     alphabet = string.ascii_lowercase
     mapping = {alphabet[i]: key[i] for i in range(26)}
@@ -98,7 +108,68 @@ def substitution_decrypt(text, key):
     return res
 
 
+# =========================
+# HILL CIPHER (2x2)
+# =========================
+class HillCipher:
+    def __init__(self, key):
+        nums = list(map(int, key.split(",")))
+        if len(nums) != 4:
+            raise ValueError("Hill key must be 4 integers (2x2 matrix)")
 
+        self.key = [
+            [nums[0], nums[1]],
+            [nums[2], nums[3]]
+        ]
+        self.mod = 26
+        self.inv_key = self._inverse_matrix()
+
+    def encrypt(self, text):
+        text = text.lower().replace(" ", "")
+        if len(text) % 2 != 0:
+            text += "x"  # padding
+
+        result = ""
+        for i in range(0, len(text), 2):
+            p1 = ord(text[i]) - ord("a")
+            p2 = ord(text[i+1]) - ord("a")
+
+            c1 = (self.key[0][0] * p1 + self.key[0][1] * p2) % self.mod
+            c2 = (self.key[1][0] * p1 + self.key[1][1] * p2) % self.mod
+
+            result += chr(c1 + ord("a")) + chr(c2 + ord("a"))
+        return result
+
+    def decrypt(self, text):
+        text = text.lower().replace(" ", "")
+        result = ""
+
+        for i in range(0, len(text), 2):
+            c1 = ord(text[i]) - ord("a")
+            c2 = ord(text[i+1]) - ord("a")
+
+            p1 = (self.inv_key[0][0] * c1 + self.inv_key[0][1] * c2) % self.mod
+            p2 = (self.inv_key[1][0] * c1 + self.inv_key[1][1] * c2) % self.mod
+
+            result += chr(p1 + ord("a")) + chr(p2 + ord("a"))
+        return result
+
+    def _inverse_matrix(self):
+        a, b = self.key[0]
+        c, d = self.key[1]
+
+        det = (a * d - b * c) % self.mod
+        det_inv = pow(det, -1, self.mod)
+
+        return [
+            [( d * det_inv) % self.mod, (-b * det_inv) % self.mod],
+            [(-c * det_inv) % self.mod, ( a * det_inv) % self.mod]
+        ]
+
+
+# =========================
+# MANUAL ALGORITHMS MAP
+# =========================
 MANUAL_ALGORITHMS = {
     "caesar": {
         "encrypt": caesar_encrypt,
@@ -119,5 +190,9 @@ MANUAL_ALGORITHMS = {
     "substitution": {
         "encrypt": substitution_encrypt,
         "decrypt": substitution_decrypt
+    },
+    "hill": {
+        "encrypt": lambda text, key: HillCipher(key).encrypt(text),
+        "decrypt": lambda text, key: HillCipher(key).decrypt(text)
     }
 }

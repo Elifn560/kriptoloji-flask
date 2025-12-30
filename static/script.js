@@ -1,11 +1,13 @@
 const algorithmSelect = document.getElementById("algorithm");
+const modeSelect = document.getElementById("mode");
 const modeGroup = document.getElementById("modeGroup");
 const keyGroup = document.getElementById("keyGroup");
+const keyInput = document.getElementById("key");
 
 function updateUI() {
     const alg = algorithmSelect.value;
 
-    // RSA key istemez
+    // RSA → key ve mode yok
     if (alg === "rsa") {
         keyGroup.style.display = "none";
         modeGroup.style.display = "none";
@@ -13,13 +15,13 @@ function updateUI() {
     }
 
     // AES / DES → key + mode
-    if (["aes", "des"].includes(alg)) {
+    if (alg === "aes" || alg === "des") {
         keyGroup.style.display = "block";
         modeGroup.style.display = "block";
         return;
     }
 
-    // 🔥 MANUEL ALGORİTMALAR → SADECE KEY
+    // KLASİK (manuel) → sadece key
     keyGroup.style.display = "block";
     modeGroup.style.display = "none";
 }
@@ -30,11 +32,20 @@ updateUI();
 document.getElementById("cryptoForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
+    const alg = algorithmSelect.value;
+    const key = keyInput.value.trim();
+
+    // 🔴 KRİTİK: manuel algoritmalar key'siz gönderilmesin
+    if (alg !== "rsa" && key === "") {
+        alert("Bu algoritma için key girmelisin!");
+        return;
+    }
+
     const payload = {
         message: document.getElementById("message").value,
-        algorithm: algorithmSelect.value,
+        algorithm: alg,
         operation: document.getElementById("operation").value,
-        key: document.getElementById("key").value || null
+        key: key
     };
 
     const res = await fetch("/send", {
